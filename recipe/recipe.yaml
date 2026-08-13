@@ -14,7 +14,7 @@ source:
   target_directory: src
 
 build:
-  number: 2
+  number: 3
 
 requirements:
   run:
