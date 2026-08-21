@@ -14,7 +14,7 @@ source:
   target_directory: src
 
 build:
-  number: 1
+  number: 2
 
 requirements:
   run:
@@ -23,11 +23,17 @@ requirements:
 tests:
   - script:
       - if: linux
-        then: echo "if {[catch {package require -exact BWidget ${{ version }}; exit 0}]} {exit 1}" | xvfb-run tclsh
-      - if: osx
-        then: echo "if {[catch {package require -exact BWidget ${{ version }}; exit 0}]} {exit 1}" | tclsh
-      - if: win
-        then: echo package require BWidget;exit | tclsh --
+        then: xvfb-run tclsh test_bwidget.tcl ${{ version }}
+        else: tclsh test_bwidget.tcl ${{ version }}
+    files:
+      recipe:
+        - test_bwidget.tcl
+    requirements:
+      run:
+        # there is no tcl package for win-arm64; its tk package ships tclsh itself
+        - if: target_platform == "win-arm64"
+          then: tk
+          else: tcl
 
 about:
   license: TCL
